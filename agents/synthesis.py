@@ -70,7 +70,8 @@ class SynthesisAgent:
             f"  \"summary\": \"3-4 sentences of executive insight\",\n"
             f"  \"key_players\": [\"List\", \"of\", \"Companies\", \"CEOs\", \"or\", \"Regulators\"],\n"
             f"  \"sentiment\": \"Bullish/Bearish/Neutral\",\n"
-            f"  \"next_steps\": \"Business strategist recommendation\"\n"
+            f"  \"contrarian_view\": \"A unique or alternative market perspective\",\n"
+            f"  \"next_steps\": \"Business strategist recommendation & predictions\"\n"
             f"}}\n\n"
             f"RULE: If no specific players are found, use 'Global Investors' or 'Market Regulators'. Do NOT leave empty."
         )
