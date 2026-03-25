@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, TrendingUp, History, Video, Globe, X, Play } from 'lucide-react';
+import { Search, TrendingUp, History, Video, Globe, X, Play, ArrowLeft } from 'lucide-react';
 import StoryArc from './StoryArc';
 import PulseTimeline from './PulseTimeline';
 
@@ -295,31 +295,53 @@ const Dashboard = () => {
 
       {/* Premium Video Modal */}
       {showVideoModal && videoUrl && (
-        <div className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center p-4 backdrop-blur-2xl animate-in fade-in duration-300">
-           <div className="relative w-full max-w-md aspect-[9/16] glass-card rounded-[2rem] border-neon-green/50 shadow-[0_0_100px_rgba(0,255,65,0.2)]">
+        <div className="fixed inset-0 bg-black/95 z-[100] flex items-center justify-center p-4 backdrop-blur-3xl animate-in fade-in zoom-in duration-300">
+           <div className="relative w-full max-w-[400px] aspect-[9/16] bg-black rounded-[2.5rem] border border-white/10 shadow-[0_0_80px_rgba(0,0,0,0.5)] overflow-hidden">
+              {/* Internal Back Button */}
               <button 
                 onClick={() => setShowVideoModal(false)}
-                className="absolute -top-12 right-0 text-white/50 hover:text-white transition-colors p-2"
+                className="absolute top-6 left-6 z-[110] flex items-center gap-2 px-4 py-2 bg-black/40 backdrop-blur-xl border border-white/10 rounded-full text-white/80 hover:text-white hover:bg-white/10 transition-all group"
               >
-                <X className="w-10 h-10" />
+                <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+                <span className="text-[10px] font-black uppercase tracking-widest">Back</span>
               </button>
-              
+
               <video 
                 src={videoUrl} 
                 controls 
                 autoPlay 
                 crossOrigin="anonymous"
-                className="w-full h-full object-cover rounded-[2rem]"
+                className="w-full h-full object-cover"
               />
               
-              <div className="absolute inset-x-0 bottom-0 p-8 glass-card border-none bg-gradient-to-t from-black/90 to-transparent pt-20">
-                 <div className="flex items-center gap-2 mb-3">
-                    <span className="px-2 py-0.5 bg-neon-green text-black text-[10px] font-black rounded">PRO</span>
-                    <p className="text-[10px] text-neon-green font-black uppercase tracking-[0.2em]">ET Pulse Insight</p>
+              {/* Premium Top Overlay */}
+              <div className="absolute top-0 inset-x-0 h-32 bg-gradient-to-b from-black/80 to-transparent pointer-events-none"></div>
+
+              <div className="absolute inset-x-0 bottom-0 p-8 pt-24 bg-gradient-to-t from-black via-black/90 to-transparent">
+                 <div className="flex items-center gap-2 mb-6">
+                    <div className="w-8 h-[2px] bg-neon-green/40"></div>
+                    <p className="text-[10px] text-neon-green font-black uppercase tracking-[0.4em]">Intelligence Report</p>
                  </div>
-                 <p className="text-sm text-white/90 leading-relaxed font-medium line-clamp-3 italic">
-                   "{briefing?.summary}"
-                 </p>
+                 
+                 <h4 className="text-3xl font-black text-white mb-6 italic tracking-tighter uppercase leading-none">
+                    {query}
+                 </h4>
+                 
+                 <div className="glass-card p-5 border-none bg-white/5 backdrop-blur-md rounded-2xl">
+                    <p className="text-sm text-white/80 leading-relaxed font-medium line-clamp-4 italic border-l-2 border-neon-green/50 pl-4 py-1">
+                      {briefing?.summary}
+                    </p>
+                 </div>
+
+                 {/* Simulated Progress Bar */}
+                 <div className="mt-8 w-full h-1 bg-white/10 rounded-full overflow-hidden">
+                    <motion.div 
+                      initial={{ width: 0 }}
+                      animate={{ width: '100%' }}
+                      transition={{ duration: 15, ease: "linear" }}
+                      className="h-full bg-neon-green shadow-[0_0_10px_#00ff41]"
+                    />
+                 </div>
               </div>
            </div>
         </div>

@@ -48,21 +48,17 @@ class VideoStudio:
         audio = AudioFileClip(voice_path)
         duration = audio.duration
         
-        bg = ColorClip(size=(720, 1280), color=(0,0,0), duration=duration)
+        # Use a premium background image if it exists in the root
+        bg_path = os.path.join(settings.BASE_DIR, "news_bg_premium.png")
+        if os.path.exists(bg_path):
+            bg = ImageClip(bg_path).with_duration(duration).with_position('center')
+            # Scaling to fit vertical 720x1280
+            bg = bg.resized(height=1280)
+        else:
+            bg = ColorClip(size=(720, 1280), color=(0,0,0), duration=duration)
         
-        caption_img = self._create_text_image(briefing_text, size=(600, 1000), fontsize=35)
-        caption_path = os.path.join(self.output_dir, f"{safe_topic}_caption.png")
-        caption_img.save(caption_path)
-        
-        txt_clip = ImageClip(caption_path).with_duration(duration).with_position('center')
-        
-        title_img = self._create_text_image(f"ET PULSE: {topic.upper()}", size=(700, 100), fontsize=50, color=(0, 255, 65))
-        title_path = os.path.join(self.output_dir, f"{safe_topic}_title.png")
-        title_img.save(title_path)
-        
-        title_clip = ImageClip(title_path).with_duration(duration).with_position(('center', 100))
-
-        video = CompositeVideoClip([bg, txt_clip, title_clip]).with_audio(audio)
+        # We now leave text rendering to the Frontend for maximum crispness and flexibility
+        video = CompositeVideoClip([bg]).with_audio(audio)
         
         output_path = os.path.join(self.output_dir, f"{safe_topic}_briefing.mp4")
         video.write_videofile(output_path, fps=24, codec="libx264", audio_codec="aac")
