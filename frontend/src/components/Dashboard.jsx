@@ -211,7 +211,7 @@ const Dashboard = () => {
                    </p>
                  </section>
 
-                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     <section className="glass-card bg-white/[0.02] p-6 rounded-2xl">
                       <h4 className="text-[10px] font-black text-white/30 uppercase tracking-[0.3em] mb-4">Strategic Entities</h4>
                       <p className="text-sm leading-relaxed text-white/70 font-medium italic">
@@ -224,10 +224,18 @@ const Dashboard = () => {
                         {briefing.sentiment}
                       </div>
                     </section>
+                    <section className="glass-card bg-red-400/5 border border-red-500/20 p-6 rounded-2xl flex flex-col justify-center">
+                       <h4 className="text-[10px] font-black text-red-500/50 uppercase tracking-[0.3em] mb-4 flex items-center gap-2">
+                         <History className="w-3 h-3" /> Contrarian View
+                       </h4>
+                       <p className="text-sm leading-relaxed text-white/60 font-medium italic">
+                         {briefing.contrarian_view}
+                       </p>
+                     </section>
                  </div>
 
                  <section className="bg-neon-green/5 border border-neon-green/10 p-6 rounded-2xl">
-                   <h4 className="text-[10px] font-black text-neon-green/50 uppercase tracking-[0.3em] mb-4">The Road Ahead</h4>
+                   <h4 className="text-[10px] font-black text-neon-green/50 uppercase tracking-[0.3em] mb-4">The Road Ahead & Predictions</h4>
                    <p className="text-sm leading-relaxed text-white/80 border-l border-neon-green/30 pl-4 py-1">
                      {briefing.next_steps}
                    </p>
