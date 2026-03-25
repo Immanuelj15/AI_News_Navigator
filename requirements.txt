@@ -1,0 +1,12 @@
+django
+djangorestframework
+django-cors-headers
+langchain
+langchain-openai
+langchain-community
+psycopg2-binary
+beautifulsoup4
+requests
+gTTS
+moviepy
+python-dotenv

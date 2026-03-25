@@ -1,0 +1,32 @@
+# Python
+venv/
+env/
+__pycache__/
+*.pyc
+db.sqlite3
+media/
+static/
+*.log
+
+# Node
+node_modules/
+dist/
+npm-debug.log*
+
+# Environment
+.env
+
+# System
+.DS_Store
+Thumbs.db
+
+# Project Specific
+.gemini/
+.agents/
+.agent/
+debug_output.txt
+test_output.txt
+test_result.txt
+test_final.txt
+debug_hf_url.py
+test_agents.py
