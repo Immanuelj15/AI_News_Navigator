@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 import { Search, TrendingUp, History, Video, Globe, X, Play, ArrowLeft } from 'lucide-react';
 import StoryArc from './StoryArc';
 import PulseTimeline from './PulseTimeline';
