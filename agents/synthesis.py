@@ -14,9 +14,9 @@ class SynthesisAgent:
         self.ollama_host = os.getenv("OLLAMA_HOST")
         self.ollama_model = os.getenv("OLLAMA_MODEL", "mistral")
         
-        # Cloud client - Mistral-7B-v0.3 is more universally supported on HF router
+        # Cloud client - Llama-3-8B is elite for multilingual instructions
         self.client = InferenceClient(
-            model="mistralai/Mistral-7B-Instruct-v0.3", 
+            model="meta-llama/Meta-Llama-3-8B-Instruct", 
             token=self.hf_token
         )
 
@@ -62,24 +62,32 @@ class SynthesisAgent:
             "You MUST return a VALID JSON object. Do NOT include any text outside the JSON."
         )
         user_prompt = (
-            f"Synthesize the latest news about '{topic}' into a high-level briefing. {language_instruction}\n"
+            f"Synthesize the latest news about '{topic}' into a high-level briefing.\n"
+            f"CRITICAL LANGUAGE RULE: Every VALUE in the resulting JSON object MUST be written in {language.upper()}.\n"
             f"PERSONALIZATION RULE: {role_instruction}\n\n"
             f"Context:\n{context}\n\n"
-            f"STRICT OUTPUT FORMAT:\n"
+            f"STRICT OUTPUT FORMAT (Values must be in {language.upper()}):\n"
             f"{{\n"
-            f"  \"summary\": \"3-4 sentences of executive insight\",\n"
-            f"  \"key_players\": [\"List\", \"of\", \"Companies\", \"CEOs\", \"or\", \"Regulators\"],\n"
-            f"  \"sentiment\": \"Bullish/Bearish/Neutral\",\n"
-            f"  \"contrarian_view\": \"A unique or alternative market perspective\",\n"
-            f"  \"next_steps\": \"Business strategist recommendation & predictions\"\n"
+            f"  \"summary\": \"Briefing in {language}\",\n"
+            f"  \"key_players\": [\"Companies in {language}\"],\n"
+            f"  \"sentiment\": \"Sentiment word in {language}\",\n"
+            f"  \"contrarian_view\": \"Alternative view in {language}\",\n"
+            f"  \"next_steps\": \"Strategic advice in {language}\"\n"
             f"}}\n\n"
-            f"RULE: If no specific players are found, use 'Global Investors' or 'Market Regulators'. Do NOT leave empty."
+            f"RULE: Do NOT translate the JSON keys. ONLY translate the values. Output ONLY the JSON object."
         )
         
-        # 1. Try Ollama (Local)
-        local_text = self._call_ollama(system_prompt, user_prompt)
-        if local_text:
-            return self._parse_json(local_text)
+        # Logic: If language is NOT English, go straight to Cloud for better multilingual quality and speed.
+        # Local models often struggle with non-Latin scripts and complex multilingual instructions.
+        if language.lower() == "english":
+            # 1. Try Ollama (Local)
+            local_text = self._call_ollama(system_prompt, user_prompt)
+            if local_text:
+                parsed = self._parse_json(local_text)
+                if parsed and parsed.get('summary') != "No summary generated":
+                    return parsed
+        else:
+            print(f"🌍 NON-ENGLISH REQUEST ({language.upper()}) DETECTED. ROUTING TO CLOUD FOR ACCURACY...")
 
         # 2. Try Hugging Face (Cloud)
         print(f"☁️ FALLING BACK TO CLOUD AI (mistralai/Mistral-7B-Instruct-v0.3)...")
